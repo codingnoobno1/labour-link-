@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Zap, ShieldCheck, BarChart3, Users2 } from "lucide-center";
+import { CheckCircle2, Zap, ShieldCheck, BarChart3, Users2 } from "lucide-react";
 
 const Solution = () => {
   const solutions = [
@@ -114,8 +114,5 @@ const Solution = () => {
     </section>
   );
 };
-
-// Fixing icons import
-import { CheckCircle2, Zap, ShieldCheck, BarChart3, Users2 } from "lucide-react";
 
 export default Solution;

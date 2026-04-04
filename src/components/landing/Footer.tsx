@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Rocket, Twitter, Instagram, Linkedin, Facebook, MapPin, Mail, Phone } from "lucide-react";
+import { Rocket, Send, Camera, Share2, MessageCircle, MapPin, Mail, Phone } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -38,10 +38,10 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: "#" },
-    { icon: Twitter, href: "#" },
-    { icon: Instagram, href: "#" },
-    { icon: Linkedin, href: "#" },
+    { icon: MessageCircle, href: "#" },
+    { icon: Send, href: "#" },
+    { icon: Camera, href: "#" },
+    { icon: Share2, href: "#" },
   ];
 
   return (

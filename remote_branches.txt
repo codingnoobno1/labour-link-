@@ -1,0 +1,4 @@
+﻿  origin/HEAD -> origin/master
+  origin/master
+  upstream/HEAD -> upstream/master
+  upstream/master

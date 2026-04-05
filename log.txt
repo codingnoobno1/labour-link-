@@ -1,0 +1,17 @@
+﻿commit 9efaed332a86a699d14f198ab2251749c40f37da (HEAD -> master, origin/master, origin/HEAD)
+Author: Rishika <rishikarkv123@gmail.com>
+Date:   Sun Apr 5 16:57:39 2026 +0530
+
+    feat: implement landing page components, Supabase authentication, and database schema for user profiles
+
+commit cf138ae375c2ed3bf9b8ddaabfdbba19c2833537
+Author: Rishika <rishikarkv123@gmail.com>
+Date:   Sun Apr 5 03:07:01 2026 +0530
+
+    feat: add Supabase Postgres best practices knowledge base and skill configuration
+
+commit 85509864c2837401ff049ba70f394aa88eaf7bd0
+Author: codingnoobno1 <164862821+codingnoobno1@users.noreply.github.com>
+Date:   Sun Apr 5 01:28:50 2026 +0530
+
+    feat: implement landing page components and site layout for LabourLink

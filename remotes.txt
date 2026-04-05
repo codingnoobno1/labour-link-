@@ -1,0 +1,2 @@
+﻿origin	https://github.com/Rishikarkv/labour-link-.git (fetch)
+origin	https://github.com/Rishikarkv/labour-link-.git (push)

@@ -23,8 +23,8 @@ export async function loginAction(prevState: any, formData: FormData) {
     return { error: error.message }
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/')
+  revalidatePath('/dashboard', 'layout')
+  redirect('/dashboard')
 }
 
 export async function registerAction(prevState: any, formData: FormData) {

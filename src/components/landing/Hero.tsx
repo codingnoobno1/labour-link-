@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ChevronRight, Play, Users, Building2, ShieldCheck } from "lucide-react";
+import Link from 'next/link';
 
 const Hero = () => {
   return (
@@ -38,10 +39,10 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center gap-4">
-            <button className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-2xl text-lg font-bold transition-all shadow-xl shadow-primary/30 flex items-center gap-2 group w-full sm:w-auto justify-center">
+            <Link href="/register" className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-2xl text-lg font-bold transition-all shadow-xl shadow-primary/30 flex items-center gap-2 group w-full sm:w-auto justify-center">
               Get Started Now
               <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Link>
             <button className="flex items-center justify-center gap-3 px-8 py-4 text-slate-900 dark:text-white font-bold hover:bg-slate-200 dark:hover:bg-slate-800 rounded-2xl transition-all border border-slate-200 dark:border-slate-800 w-full sm:w-auto">
               <div className="bg-primary/20 p-2 rounded-full">
                 <Play className="w-4 h-4 text-primary fill-primary" />

@@ -55,12 +55,12 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="flex items-center gap-4">
-            <button className="text-sm font-medium text-slate-900 dark:text-white">
+            <Link href="/login" className="text-sm font-medium text-slate-900 dark:text-white">
               Log in
-            </button>
-            <button className="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all shadow-lg shadow-primary/20">
+            </Link>
+            <Link href="/register" className="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all shadow-lg shadow-primary/20 block text-center">
               Get Started
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -87,12 +87,12 @@ const Navbar = () => {
             </Link>
           ))}
           <hr className="border-slate-200 dark:border-slate-800 my-2" />
-          <button className="w-full py-3 text-center font-medium text-slate-900 dark:text-white">
+          <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="w-full py-3 text-center font-medium text-slate-900 dark:text-white block">
             Log in
-          </button>
-          <button className="w-full py-3 bg-primary text-white rounded-xl font-bold shadow-lg shadow-primary/20">
+          </Link>
+          <Link href="/register" onClick={() => setIsMobileMenuOpen(false)} className="w-full py-3 bg-primary text-white rounded-xl font-bold shadow-lg shadow-primary/20 text-center block">
             Get Started
-          </button>
+          </Link>
         </div>
       )}
     </nav>

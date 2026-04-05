@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, UserCheck, SearchCheck } from "lucide-react";
+import Link from 'next/link';
 
 const CTA = () => {
   return (
@@ -28,13 +29,13 @@ const CTA = () => {
               </p>
               
               <div className="flex flex-col sm:row items-center gap-6">
-                 <button className="bg-white text-primary px-10 py-5 rounded-2xl text-xl font-bold shadow-xl hover:scale-105 transition-all flex items-center gap-3 group w-full sm:w-auto justify-center">
+                 <Link href="/register" className="bg-white text-primary px-10 py-5 rounded-2xl text-xl font-bold shadow-xl hover:scale-105 transition-all flex items-center gap-3 group w-full sm:w-auto justify-center">
                     Hire Workers Now
                     <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-                 </button>
-                 <button className="text-white border-2 border-white/20 hover:bg-white/10 rounded-2xl px-10 py-5 font-bold transition-all w-full sm:w-auto">
+                 </Link>
+                 <Link href="/register" className="text-white border-2 border-white/20 hover:bg-white/10 rounded-2xl px-10 py-5 font-bold transition-all w-full sm:w-auto text-center block">
                     Apply as a Worker
-                 </button>
+                 </Link>
               </div>
            </div>
 

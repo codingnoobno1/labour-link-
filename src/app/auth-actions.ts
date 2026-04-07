@@ -14,7 +14,7 @@ export async function loginAction(prevState: any, formData: FormData) {
     return { error: 'Please enter both email and password.' }
   }
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
@@ -23,8 +23,18 @@ export async function loginAction(prevState: any, formData: FormData) {
     return { error: error.message }
   }
 
-  revalidatePath('/dashboard', 'layout')
-  redirect('/dashboard')
+  // Get user profile to check role
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', data.user.id)
+    .single()
+
+  const role = profile?.role || 'labour'
+  const redirectPath = role === 'employer' ? '/employer/dashboard' : '/dashboard'
+
+  revalidatePath(redirectPath, 'layout')
+  redirect(redirectPath)
 }
 
 export async function registerAction(prevState: any, formData: FormData) {
@@ -36,6 +46,7 @@ export async function registerAction(prevState: any, formData: FormData) {
   const confirmPassword = data.confirmPassword as string
   const name = data.name as string
   const phone = data.phone as string
+  const role = (data.role as string) || 'labour' // Default to labour
 
   if (!email || !password || !name) {
     return { error: 'Please fill in required fields.' }
@@ -52,6 +63,7 @@ export async function registerAction(prevState: any, formData: FormData) {
       data: {
         name,
         phone,
+        role,
       }
     }
   })
@@ -60,6 +72,8 @@ export async function registerAction(prevState: any, formData: FormData) {
     return { error: error.message }
   }
 
+  const loginRedirect = role === 'employer' ? '/employer/login' : '/labour_login'
+  
   revalidatePath('/', 'layout')
-  redirect('/login?message=Registration successful. Please log in.')
+  redirect(`${loginRedirect}?message=Registration successful. Please log in.`)
 }

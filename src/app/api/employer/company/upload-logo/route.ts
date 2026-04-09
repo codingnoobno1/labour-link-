@@ -21,25 +21,43 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    return new Promise<NextResponse>((resolve) => {
+    const cloudinaryResult = await new Promise<any>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          folder: 'labour-link-avatars',
+          folder: 'labour-link-logos',
         },
         (error, result) => {
-          if (error) {
-            console.error('Cloudinary upload error:', error);
-            resolve(NextResponse.json({ error: 'Upload failed' }, { status: 500 }));
-          } else {
-            resolve(NextResponse.json({ url: result?.secure_url }, { status: 200 }));
-          }
+          if (error) reject(error);
+          else resolve(result);
         }
       );
-
       uploadStream.end(buffer);
     });
+
+    const { data: existingCompany } = await supabase
+      .from('companies')
+      .select('id')
+      .eq('owner_id', user.id)
+      .single();
+
+    if (!existingCompany) {
+      return NextResponse.json({ error: 'Company not found. Update company details first.' }, { status: 404 });
+    }
+
+    const { data, error } = await supabase
+      .from('companies')
+      .update({ logo_url: cloudinaryResult.secure_url })
+      .eq('owner_id', user.id)
+      .select()
+      .single();
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    return NextResponse.json({ url: cloudinaryResult.secure_url, company: data }, { status: 200 });
   } catch (error: any) {
-    console.error('Upload route error:', error);
+    console.error('Logo upload error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

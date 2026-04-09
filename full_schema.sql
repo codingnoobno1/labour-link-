@@ -6,6 +6,7 @@ create table if not exists public.profiles (
   phone text,
   role text check (role in ('labour', 'employer')),
   avatar_url text,
+  skills text[],
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   primary key (id)
 );

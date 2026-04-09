@@ -10,43 +10,41 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Fetch profile and check if aadhar exists in documents
-    const [profileRes, docRes] = await Promise.all([
-      supabase.from('profiles').select('*').eq('id', user.id).single(),
-      supabase.from('documents').select('id').eq('user_id', user.id).eq('type', 'aadhar').limit(1)
-    ]);
+    // Check profile table
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('name, phone, avatar_url')
+      .eq('id', user.id)
+      .single();
 
-    if (profileRes.error) {
-      return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
-    }
+    // Check documents table for Aadhar
+    const { data: documents } = await supabase
+      .from('documents')
+      .select('type')
+      .eq('user_id', user.id);
 
-    const profile = profileRes.data;
-    const aadharExists = docRes.data && docRes.data.length > 0;
+    const hasAadhar = documents?.some(doc => doc.type === 'aadhar');
 
-    let completion = 0;
-    const items = [
-      { field: 'name', value: profile.name, weight: 20 },
-      { field: 'phone', value: profile.phone, weight: 20 },
-      { field: 'skills', value: profile.skills && profile.skills.length > 0, weight: 20 },
-      { field: 'avatar_url', value: profile.avatar_url, weight: 20 },
-      { field: 'aadhar_doc', value: aadharExists, weight: 20 },
-    ];
+    let filledFields = 0;
+    const totalFields = 4; // name, phone, avatar, aadhar
 
-    items.forEach(item => {
-      if (item.value) {
-        completion += item.weight;
-      }
-    });
+    if (profile?.name) filledFields++;
+    if (profile?.phone) filledFields++;
+    if (profile?.avatar_url) filledFields++;
+    if (hasAadhar) filledFields++;
+
+    const completionPercentage = (filledFields / totalFields) * 100;
 
     return NextResponse.json({
-      completion,
-      details: items.map(item => ({
-        field: item.field,
-        completed: !!item.value
-      }))
+      completion: completionPercentage,
+      details: {
+        hasName: !!profile?.name,
+        hasPhone: !!profile?.phone,
+        hasAvatar: !!profile?.avatar_url,
+        hasAadhar
+      }
     }, { status: 200 });
-  } catch (error: any) {
-    console.error('Completion calculation error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

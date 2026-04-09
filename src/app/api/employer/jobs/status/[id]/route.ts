@@ -3,8 +3,9 @@ import { createClient } from '@/utils/supabase/server';
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const supabase = await createClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -23,7 +24,7 @@ export async function PATCH(
     const { data: job, error: checkError } = await supabase
       .from('works')
       .select('id, companies!inner(owner_id)')
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('companies.owner_id', user.id)
       .single();
 
@@ -34,7 +35,7 @@ export async function PATCH(
     const { data, error } = await supabase
       .from('works')
       .update({ status })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single();
 

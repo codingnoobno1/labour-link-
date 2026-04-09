@@ -3,8 +3,9 @@ import { createClient } from '@/utils/supabase/server';
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const supabase = await createClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -13,13 +14,14 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { title, description, location, pay, duration, type } = await request.json();
+    const body = await request.json();
+    const { title, description, location, pay, duration, type } = body;
 
     // First check ownership
     const { data: existingJob, error: checkError } = await supabase
       .from('works')
       .select('id, companies!inner(owner_id)')
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('companies.owner_id', user.id)
       .single();
 
@@ -37,7 +39,7 @@ export async function PUT(
         duration,
         type,
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single();
 

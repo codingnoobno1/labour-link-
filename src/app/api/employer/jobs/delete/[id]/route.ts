@@ -3,8 +3,9 @@ import { createClient } from '@/utils/supabase/server';
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const supabase = await createClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -19,7 +20,7 @@ export async function DELETE(
     const { data: job, error: checkError } = await supabase
       .from('works')
       .select('id, companies!inner(owner_id)')
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('companies.owner_id', user.id)
       .single();
 
@@ -30,7 +31,7 @@ export async function DELETE(
     const { error: deleteError } = await supabase
       .from('works')
       .delete()
-      .eq('id', params.id);
+      .eq('id', id);
 
     if (deleteError) {
       return NextResponse.json({ error: deleteError.message }, { status: 400 });

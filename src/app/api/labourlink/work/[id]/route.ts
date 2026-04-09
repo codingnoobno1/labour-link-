@@ -3,8 +3,9 @@ import { createClient } from '@/utils/supabase/server';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const supabase = await createClient();
     
@@ -19,7 +20,7 @@ export async function GET(
           description
         )
       `)
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('status', 'open') // Workers can only see open jobs
       .single();
 

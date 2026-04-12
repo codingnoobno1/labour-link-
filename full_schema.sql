@@ -132,3 +132,26 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- 8. INVITATIONS (Employer to Worker)
+create table if not exists public.invitations (
+  id uuid default gen_random_uuid() primary key,
+  job_id uuid not null references public.works(id) on delete cascade,
+  worker_id uuid not null references public.profiles(id) on delete cascade,
+  status text check (status in ('pending', 'accepted', 'ignored')) default 'pending',
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  unique (job_id, worker_id)
+);
+
+-- Enable RLS for invitations
+alter table public.invitations enable row level security;
+create policy "Workers can view their own invitations." on public.invitations 
+  for select using (auth.uid() = worker_id);
+create policy "Employers can manage their invitations." on public.invitations 
+  for all using (
+    exists (
+      select 1 from public.works 
+      join public.companies on works.company_id = companies.id
+      where works.id = public.invitations.job_id and companies.owner_id = auth.uid()
+    )
+  );
